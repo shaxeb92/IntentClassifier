@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun loadModelFile(): MappedByteBuffer {
-        val fileDescriptor = assets.openFd("model.tflite")
+        val fileDescriptor = assets.openFd("model.tflite") // TF Lite model path
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
         val fileChannel = inputStream.channel
         val startOffset = fileDescriptor.startOffset
@@ -89,7 +89,7 @@ fun PredictionScreen(tflite: Interpreter?) {
         OutlinedTextField(
             value = inputText,
             onValueChange = { inputText = it },
-            label = { Text("Enter 51 binary features or paste here") },
+            label = { Text("Enter 34 binary features or paste here") }, // Updated to 34 features
             modifier = Modifier.fillMaxWidth(),
             singleLine = false
         )
@@ -131,9 +131,9 @@ fun PredictionScreen(tflite: Interpreter?) {
 fun runPrediction(tflite: Interpreter?, inputStr: String): String {
     return try {
         val tokens = inputStr.split(",")
-        if (tokens.size != 51) return "Error: Must contain 51 features"
+        if (tokens.size != 34) return "Error: Must contain 34 features" // Updated to 34 features
 
-        val input = FloatArray(51)
+        val input = FloatArray(34) // Updated to 34 features
         tokens.forEachIndexed { i, v ->
             input[i] = v.trim().toFloat()
         }
@@ -156,7 +156,7 @@ fun parseVectorsFromXml(inputStream: InputStream): List<String> {
     while (eventType != XmlPullParser.END_DOCUMENT) {
         if (eventType == XmlPullParser.START_TAG && parser.name == "vector") {
             val vectorValue = parser.nextText()
-            if (vectorValue.split(",").size == 51) {
+            if (vectorValue.split(",").size == 34) { // Updated to 34 features
                 vectors.add(vectorValue.trim())
             }
         }
